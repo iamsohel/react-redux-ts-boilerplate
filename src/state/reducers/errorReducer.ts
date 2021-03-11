@@ -2,11 +2,11 @@ import { ActionTypes } from '../action-types';
 import { Action } from '../actions';
 
 interface ErrorState {
-    error: string | undefined
+    error: string | null
 }
 
 const initialState = {
-    error: ''
+    error: null
 };
 
 const errorReducer =  (state: ErrorState = initialState, action: Action): ErrorState => {
@@ -19,7 +19,7 @@ const errorReducer =  (state: ErrorState = initialState, action: Action): ErrorS
         case ActionTypes.CLEAR_ERRORS: {
           return {
             ...state,
-            error: ''
+            error:  null
           };
         }
         default: {

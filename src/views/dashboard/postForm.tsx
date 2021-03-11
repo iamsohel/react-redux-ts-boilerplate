@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import { getPost, savePost } from '../../services/postService';
+import { useDispatch } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useActions } from '../../hooks/useActions';
+//import { addMovie } from '../../state/action-creators/movie';
 
 interface Props {
    match: {
@@ -18,25 +22,32 @@ interface Props {
  const PostForm = ({match, history }: Props) => {
     console.log(match, history)
     const [title, setTitle] = useState('');
-    const [body, setBody] = useState('');
+     const [body, setBody] = useState('');
+     const dispatch = useDispatch();
+
+     const { addMovie } = useActions();
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const data ={
-            title, body
+            title: "Comedy 150",
+            genreId: "6047570627e97130a02abc2e",
+            numberInStock: 50,
+            dailyRentalRate: 60
         }
         if( match.params.id === 'new'){
-            await savePost(data);
+           // await savePost(data);
+          addMovie(data)
         } else {
-            await savePost({...data, id: match.params.id});
+           // await savePost({...data, id: match.params.id});
         }
         history.push("/");
     }
 
     const getPostData = async (id: number) => {
-        const { data } = await getPost(id);
-        setTitle(data.title);
-        setBody(data.body);
+        //const { data } = await getPost(id);
+        //setTitle(data.title);
+        //setBody(data.body);
     }
 
     React.useEffect(() => {

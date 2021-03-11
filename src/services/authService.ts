@@ -4,16 +4,11 @@ import axios from "axios";
 import http from './httpService';
 
 export async function login(data: LoginData) {
-    const res = await http.post('/auth', data);
-
-    if(res && res.data){
-        localStorage.setItem('token', res.data);
-        const decoded =  jwt_decode(res.data);
-        console.log("decoded::", decoded)
-        return decoded;
-    } else {
-        return res.data
-    }
+  const res = await http.post('/auth', data);
+  localStorage.setItem('token', res.data);
+  const decoded =  jwt_decode(res.data);
+  console.log("decoded::", decoded)
+  return decoded;
 }
 
 // export function register(user) {
@@ -27,7 +22,7 @@ export function logout() {
 
 export function getCurrentUser() {
   try {
-    const token = localStorage.getItem('current_user');
+    const token = localStorage.getItem('token');
     if (token){
         const decoded =  jwt_decode(token);
         return decoded;

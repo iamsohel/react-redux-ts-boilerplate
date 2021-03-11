@@ -18,32 +18,27 @@ const reducer = (
   action: Action
 ): AuthenticationState => {
   switch (action.type) {
-    case ActionTypes.STOP_AUTH_LOADING: {
+    case ActionTypes.AUTH_LOADING: {
       return {
-          ...initialState,  loading: true //! mean true if it has value
+          ...state,  loading: true //! mean true if it has value
       }
     }
-    case ActionTypes.STOP_AUTH_LOADING: {
-      return {
-          ...initialState,  loading: false //! mean true if it has value
-      }
-    }
-
+    
     case ActionTypes.SET_CURRENT_USER: {
       return {
-          ...initialState, currentUser: action.payload, loggedIn: true, loading: false  //! mean true if it has value
+          ...state, currentUser: action.payload, loggedIn: true, loading: false  //! mean true if it has value
       }
     }
     case ActionTypes.LOGOUT_USER: {
       return {
-        ...initialState,
+        ...state,
         loggedIn: false,
         currentUser: null
       };
     }
 
     default: {
-      return initialState;
+      return state;
     }
   }
 };

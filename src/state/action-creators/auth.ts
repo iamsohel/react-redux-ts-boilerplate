@@ -8,10 +8,12 @@ interface LoginInterface {
   password: string
 }
 
- export const loginUser = (loginData: LoginInterface) => {
-  return async (dispatch: Dispatch<Action>) => {
+ export const loginUser = (loginData: LoginInterface) => async (dispatch: Dispatch<Action>) => {
     dispatch({
-      type: ActionTypes.STOP_AUTH_LOADING,
+      type: ActionTypes.CLEAR_ERRORS
+    });
+    dispatch({
+      type: ActionTypes.AUTH_LOADING,
     });
 
     try {
@@ -21,13 +23,19 @@ interface LoginInterface {
         payload: res,
       });
       
-    } catch (err) {
+    } catch (error) {
       dispatch({
         type: ActionTypes.SET_ERRORS,
-        payload: err.message,
+        payload: error.response.data
       });
      
     }
-  };
+};
+
+export const setCurrentUser = (currentUser: any) => {
+  return {
+      type: ActionTypes.SET_CURRENT_USER,
+      payload: currentUser
+  }
 };
 

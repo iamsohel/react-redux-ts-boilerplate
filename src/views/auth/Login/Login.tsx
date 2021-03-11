@@ -8,8 +8,11 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { TextField, Button } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
-import { actionCreators } from '../../../state';
+import { authActionCreators } from '../../../state/action-creators';
 import { useDispatch } from 'react-redux';
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
+import { useActions } from '../../../hooks/useActions';
+import { Redirect } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -67,20 +70,29 @@ export default function Login(props:any) {
   const dispatch = useDispatch();
   const [email, setEmail] = React.useState<string>('');
   const [password, setPassword] = React.useState('');
-  const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>('');
+  
 
-  const handleSubmit = async (e:any) => {
+  const { loggedIn,
+    currentUser,
+    loading } = useTypedSelector(
+    (state) => state.auth
+);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data ={
         email, password
     }
     try {
-      dispatch(actionCreators.loginUser(data));
-      props.history.push("/");
+      dispatch(authActionCreators.loginUser(data));
     } catch(ex) {
       console.log("error", error)
     }
+  }
+
+  if (loggedIn) {
+    return <Redirect to="/" />;
   }
 
   return (

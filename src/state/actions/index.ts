@@ -1,7 +1,7 @@
 import { ActionTypes } from '../action-types';
 
 interface AuthLoading {
-  type: ActionTypes.STOP_AUTH_LOADING;
+  type: ActionTypes.AUTH_LOADING;
 }
 
 interface StopAuthLoading {
@@ -25,7 +25,6 @@ interface SetError {
 
 interface CLearError {
   type: ActionTypes.CLEAR_ERRORS;
-  payload: any;
 }
 
 
