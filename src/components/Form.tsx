@@ -1,29 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import { Grid, Button, TextField, Divider } from '@material-ui/core';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -62,22 +43,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 export default function Checkout() {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
-
   return (
     <React.Fragment>
-  
       <main className={classes.layout}>
         <Paper className={classes.paper}>
           <Typography  variant="h5" >
@@ -90,8 +61,8 @@ export default function Checkout() {
             <TextField
                 required
                 id="firstName"
-                name="firstName"
-                label="First name"
+                name="title"
+                label="Title"
                 fullWidth
                 autoComplete="given-name"
             />
@@ -178,7 +149,6 @@ export default function Checkout() {
             </Button>
         </div>
         </Paper>
-        <Copyright />
       </main>
     </React.Fragment>
   );

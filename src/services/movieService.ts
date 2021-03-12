@@ -29,11 +29,13 @@ export function saveMovie(movie: any) {
     return http.post(`/movies`, movie);
 }
 
-// export function deletePost(id) {
-//     return http.delete(`/posts/${id}`);
-// }
+export function removeMovie(id: string) {
+    return http.delete(`/movies/${id}`);
+}
 
-export default {
-    getAllMovie
-  };
+// export default {
+//     getAllMovie,
+//     removeMovie,
+//     saveMovie
+//   };
   

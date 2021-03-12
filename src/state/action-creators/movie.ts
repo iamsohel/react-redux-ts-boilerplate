@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { ActionType } from '../action-types/movieActionTypes';
 import { Action } from '../actions/movieActions';
-import { Movie, getAllMovie, saveMovie } from '../../services/movieService';
+import { Movie, getAllMovie, saveMovie, removeMovie } from '../../services/movieService';
 
 interface AddMovieType {
     title: string,
@@ -53,6 +53,24 @@ export const addMovie = (movie: AddMovieType) => async (dispatch: Dispatch<Actio
     } catch (error) {
     //   dispatch({
     //     type: ActionType.SET_ERRORS,
+    //     payload: error.response.data
+    //   });
+     
+    }
+};
+
+export const deleteMovie = (id: string) => async (dispatch: Dispatch<Action>) =>{
+   
+    try {
+        const res = await removeMovie(id);
+        dispatch({
+            type: ActionType.DELETE_MOVIE,
+            payload: id,
+        });
+      
+    } catch (error) {
+    //   dispatch({
+    //     //type: ActionType.SET_ERRORS,
     //     payload: error.response.data
     //   });
      

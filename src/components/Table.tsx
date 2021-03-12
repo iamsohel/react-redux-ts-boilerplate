@@ -15,7 +15,10 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import { Movie } from '../services/movieService';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-
+import Button from '@material-ui/core/Button';
+import CreateIcon from '@material-ui/icons/Create';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { useActions } from '../hooks/useActions';
 
 const useStyles1 = makeStyles((theme: Theme) =>
   createStyles({
@@ -99,12 +102,18 @@ export default function CustomPaginationActionsTable({movieList}: PropsType) {
   const classes = useStyles2();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const { deleteMovie } = useActions();
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, movieList.length - page * rowsPerPage);
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
   };
+
+  const handleDelete = (id: string) => {
+    console.log("id", id)
+    deleteMovie(id)
+  }
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -122,7 +131,7 @@ export default function CustomPaginationActionsTable({movieList}: PropsType) {
             <TableCell >Genre</TableCell>
             <TableCell >In Stock</TableCell>
             <TableCell >Daily Rate</TableCell>
-            <TableCell >Daily Rate</TableCell>
+            <TableCell align="center">Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -143,8 +152,24 @@ export default function CustomPaginationActionsTable({movieList}: PropsType) {
               <TableCell >
                 {row.dailyRentalRate}
                   </TableCell>
-            <TableCell  >
-               Update | Delete
+            <TableCell  align="center">
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                startIcon={<CreateIcon />}
+              >
+                Update
+              </Button>  {'  '} 
+              <Button
+                variant="contained"
+                color="secondary"
+                size="small"
+                startIcon={<DeleteIcon />}
+                onClick={() => handleDelete(row._id)}
+              >
+                Delete
+              </Button>
               </TableCell>
             </TableRow>
           ))}
