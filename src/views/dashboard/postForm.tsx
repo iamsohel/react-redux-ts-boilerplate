@@ -4,8 +4,6 @@ import { useDispatch } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useActions } from '../../hooks/useActions';
-//import { addMovie } from '../../state/action-creators/movie';
-
 interface Props {
    match: {
        params: {

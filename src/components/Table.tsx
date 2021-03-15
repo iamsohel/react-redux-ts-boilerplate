@@ -15,6 +15,8 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import { Movie } from '../services/movieService';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 
 const useStyles1 = makeStyles((theme: Theme) =>
@@ -122,7 +124,7 @@ export default function CustomPaginationActionsTable({movieList}: PropsType) {
             <TableCell >Genre</TableCell>
             <TableCell >In Stock</TableCell>
             <TableCell >Daily Rate</TableCell>
-            <TableCell >Daily Rate</TableCell>
+            <TableCell >Action</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -143,8 +145,25 @@ export default function CustomPaginationActionsTable({movieList}: PropsType) {
               <TableCell >
                 {row.dailyRentalRate}
                   </TableCell>
-            <TableCell  >
-               Update | Delete
+                  <TableCell  >
+                <Link to={`/movie/update/${row._id}`}>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        
+                    >
+                          Update { }
+                    </Button>
+                </Link>
+                <Link to={`/movie/create`}> 
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    
+                >
+                              Delete
+                </Button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}

@@ -19,7 +19,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="#">
-        Volcano Lab
+        V Lab
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
