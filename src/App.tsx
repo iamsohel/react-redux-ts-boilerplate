@@ -8,7 +8,7 @@ import setTokenAlwaysToHeader from './utils/set-auth-token';
 const Login =  lazy(() => import('./views/auth/Login'));
 const Register =  lazy(() => import('./views/auth/register'));
 const Dashboard =  lazy(() => import('./views/dashboard/dashboard'));
-const MovieUpdate = lazy(() => import('./views/dashboard/postForm'))
+const MovieUpdate = lazy(() => import('./views/movies/movieUpdate'))
 const MovieCreate = lazy(() => import('./views/movies/movieCreate'))
 const Movies =  lazy(() => import('./views/movies/movieList'))
 

@@ -4,12 +4,15 @@ import { Movie } from '../../services/movieService'
 
 interface MovieState {
   movies: Movie[],
-  loading: boolean
+  selectedMovie?: Movie,
+  loading: boolean,
+  error: string | null
 }
 
 const initialState = {
   movies: [],
-  loading: false
+  loading: false,
+  error: null
 };
 
 const reducer = (
@@ -19,21 +22,49 @@ const reducer = (
   switch (action.type) {
     case ActionType.MOVIE_LOADING:
       return {
-        movies: [],  loading: true
+        ...state,
+        loading: true, error: null
+      };
+    case ActionType.MOVIE_ERROR:
+      return {
+        ...state,
+        loading: false, error: action.payload
       };
     case ActionType.FETCH_MOVIES:
       return {
           ...state,
           movies: action.payload,
-          loading: false
+          loading: false, error: null
+      };
+    
+    case ActionType.FETCH_MOVIE:
+      return {
+          ...state,
+          selectedMovie: action.payload,
+          loading: false, error: null
       };
     case ActionType.ADD_MOVIE:
-      console.log("movie add2", action.payload)
-
       return {
           ...state,
           movies: [...state.movies, action.payload],
-          loading: false
+          loading: false, error: null
+      };
+    case ActionType.DELETE_MOVIE:
+      return {
+        ...state, 
+          movies:  [...state.movies.filter(( movie ) => movie._id !== action.payload)],
+          loading: false, error: null
+      };
+    
+    case ActionType.UPDATE_MOVIE:
+      let movies = [...state.movies];
+      let index = movies.findIndex((movie => movie._id == action.payload._id));
+      movies[index] = action.payload
+      return {
+        ...state,
+        movies: movies,
+        loading: false, error: null,
+        selectedMovie: undefined
       };
     default:
         return state;

@@ -92,7 +92,7 @@ export default function Login(props:any) {
   }
 
   if (loggedIn) {
-    return <Redirect to="/" />;
+    return <Redirect to="/movies" />;
   }
 
   return (

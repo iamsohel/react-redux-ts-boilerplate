@@ -35,7 +35,7 @@ interface Props {
         }
         if( match.params.id === 'new'){
            // await savePost(data);
-          addMovie(data)
+          addMovie(data, history)
         } else {
            // await savePost({...data, id: match.params.id});
         }

@@ -1,30 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import { Grid, Button, TextField, Divider } from '@material-ui/core';
-import Link from '@material-ui/core/Link';
+import { Grid, Button, TextField, Divider, MenuItem } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '../../components/LinearProgress';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import Alert from '../../components/Aleart';
 
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -64,37 +47,62 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Checkout() {
+interface Props {
+  match: {
+      params: {
+          id:  any
+      },
+      url: string,
+      path: string,
+      isExact: boolean,
+
+  },
+  history: any,
+}
+
+const CreateMovie = ({match, history }: Props) => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [title, setTitle] = React.useState<string>('');
+  const [numberInStock, setNumberInStock] = React.useState<number>(0);
+  const [dailyRentalRate, setDailyRentalRate] = React.useState<number>(0);
+  const [genreId, setGenreId] = React.useState<string>('');
+  const { addMovie } = useActions();
+  const {loading, error } = useTypedSelector((state) => state.movies);
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+        const data ={
+            title: title,
+            genreId:"604f32c72f70f9318447622c",
+            numberInStock: numberInStock,
+            dailyRentalRate: dailyRentalRate
+        }
+        addMovie(data, history);
+    }
 
   return (
     <React.Fragment>
-  
           <main className={classes.layout}>
-         <LinearProgress/>
-              
+         {loading && <LinearProgress/>}
+         {error && (<Alert  style={{marginTop: '10px'}} severity="error">{error}</Alert>)}
+         
         <Paper className={classes.paper}>
+        <form onSubmit={handleSubmit}>
           <Typography  variant="h5" >
             Create Movie
           </Typography>
           <React.Fragment>
-                      <Divider style={{marginTop:"10px"}}/>
+          <Divider style={{marginTop:"10px"}}/>
+         
         <Grid container spacing={3}>
             <Grid item xs={12} sm={6}>
             <TextField
                 required
-                id="firstName"
-                name="firstName"
-                label="First name"
+                id="title"
+                name="title"
+                value={title}
+                onChange= { e => setTitle(e.target.value)}
+                label="Title"
                 fullWidth
                 autoComplete="given-name"
             />
@@ -102,66 +110,47 @@ export default function Checkout() {
             <Grid item xs={12} sm={6}>
             <TextField
                 required
-                id="lastName"
-                name="lastName"
-                label="Last name"
+                type="number"
+                id="numberInStock"
+                name="numberInStock"
+                value={numberInStock}
+                onChange= { e => setNumberInStock(parseInt(e.target.value))}
+                label="Number In Stock"
                 fullWidth
                 autoComplete="family-name"
             />
             </Grid>
-            <Grid item xs={12}>
-            <TextField
-                required
-                id="address1"
-                name="address1"
-                label="Address line 1"
-                fullWidth
-                autoComplete="shipping address-line1"
-            />
-            </Grid>
-            <Grid item xs={12}>
-            <TextField
-                id="address2"
-                name="address2"
-                label="Address line 2"
-                fullWidth
-                autoComplete="shipping address-line2"
-            />
-            </Grid>
+            
             <Grid item xs={12} sm={6}>
             <TextField
                 required
-                id="city"
-                name="city"
-                label="City"
+                type="number"
+                id="dailyRentalRate"
+                name="dailyRentalRate"
+                value={dailyRentalRate}
+                onChange= { e => setDailyRentalRate(parseInt(e.target.value))}
+                label="Daily Rental Rate"
                 fullWidth
                 autoComplete="shipping address-level2"
             />
             </Grid>
             <Grid item xs={12} sm={6}>
-            <TextField id="state" name="state" label="State/Province/Region" fullWidth />
-            </Grid>
-            <Grid item xs={12} sm={6}>
             <TextField
-                required
-                id="zip"
-                name="zip"
-                label="Zip / Postal code"
-                fullWidth
-                autoComplete="shipping postal-code"
-            />
+                id="genreId"
+                select
+                label="Select Genre"
+                value={genreId}
+                onChange= { e => setGenreId(e.target.value)}
+                helperText="Please select genre"
+              >
+                  <MenuItem key="1" value="6047570627e97130a02abc2e">
+                    Action
+                  </MenuItem>
+                  <MenuItem key="2" value="6047570627e97130a02abc2e">
+                    Horror
+                  </MenuItem>
+              </TextField>
             </Grid>
-            <Grid item xs={12} sm={6}>
-            <TextField
-                required
-                id="country"
-                name="country"
-                label="Country"
-                fullWidth
-                autoComplete="shipping country"
-            />
-            </Grid>
-            
         </Grid>
         </React.Fragment>
         <div className={classes.buttons}>
@@ -173,6 +162,7 @@ export default function Checkout() {
                           Cancel
             </Button>
             <Button
+            type="submit"
                 variant="contained"
                 color="primary"
                 className={classes.button}
@@ -180,9 +170,11 @@ export default function Checkout() {
                     Submit
             </Button>
         </div>
+        </form>
         </Paper>
-        <Copyright />
       </main>
     </React.Fragment>
   );
 }
+
+export default CreateMovie;
