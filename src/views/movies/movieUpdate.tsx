@@ -1,7 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import { Grid, Button, TextField, Divider, MenuItem } from '@material-ui/core';
+import { Grid, Button, TextField, Divider, MenuItem, Container } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '../../components/LinearProgress';
 import { useActions } from '../../hooks/useActions';
@@ -103,10 +103,12 @@ const UpdateMovie = ({match, history }: Props) => {
     console.log("m2, l2: ",selectedMovie, loading)
   return (
     <React.Fragment>
-          <main className={classes.layout}>
-         {loading && (<LinearProgress/>)}
-         {error && (<Alert  style={{marginTop: '10px'}} severity="error">{error}</Alert>)}
-         {selectedMovie && (
+          
+        
+          <Container maxWidth="xl">
+            {loading && (<LinearProgress/>)}
+            {error && (<Alert  style={{marginTop: '10px'}} severity="error">{error}</Alert>)} 
+            {selectedMovie && (
            <Paper className={classes.paper}>
            <form onSubmit={handleSubmit}>
              <Typography  variant="h5" >
@@ -194,10 +196,8 @@ const UpdateMovie = ({match, history }: Props) => {
            </div>
            </form>
            </Paper>
-         )}
-         
-        
-      </main>
+        )}
+      </Container> 
     </React.Fragment>
   );
 }

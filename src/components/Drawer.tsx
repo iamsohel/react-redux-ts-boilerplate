@@ -22,6 +22,11 @@ import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import { Link } from 'react-router-dom';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { useDispatch } from 'react-redux';
+import { useActions } from '../hooks/useActions';
 
 const drawerWidth = 240;
 
@@ -104,15 +109,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppDrawer = () => {
+
+interface Props {
+  match: {
+      params: {
+          id:  any
+      },
+      url: string,
+      path: string,
+      isExact: boolean,
+
+  },
+  history: any,
+}
+
+const AppDrawer = ({match, history }: Props) => {
+    const dispatch = useDispatch();
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const opens = Boolean(anchorEl);
+    const { logoutUser } = useActions();
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+    const handleLogout = () => {
+      setAnchorEl(null);
+      logoutUser(history)
+    }
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     return (
         <>
@@ -131,9 +166,35 @@ const AppDrawer = () => {
                 Dashboard
                 </Typography>
                 <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                    <NotificationsIcon />
-                </Badge>
+                <div>
+                    <IconButton
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={opens}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </Menu>
+                  </div>
                 </IconButton>
             </Toolbar>
         </AppBar>

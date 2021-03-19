@@ -8,11 +8,6 @@ import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
 import Table from '../../components/Table';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -20,10 +15,10 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useActions } from '../../hooks/useActions';
 import { getMovies } from '../../state/action-creators/movie';
 import Copyright from '../../components/Footer';
-import AppNavBar from '../../components/AppBar';
+import Button from '@material-ui/core/Button';
 import AppDrawer from '../../components/Drawer';
 import LinearProgress from '../../components/LinearProgress';
-import Alert from '../../components/Aleart'
+import Alert from '../../components/Aleart';
 
 const drawerWidth = 240;
 
@@ -98,11 +93,12 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
     display: 'flex',
-    overflow: 'auto',
     flexDirection: 'column',
+    marginTop: 10,
+    marginBottom: 15,
   },
   fixedHeight: {
-    height: 240,
+    height: 50,
   },
 }));
 
@@ -112,36 +108,39 @@ export default function Dashboard() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const { loggedIn} = useTypedSelector((state) => state.auth);
+    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
    
     React.useEffect(() => {
         dispatch(getMovies())
     }, [])
    
-  if (!loggedIn) {
-    return <Redirect to="/login" />;
- }
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppDrawer/>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        {loading && (<LinearProgress/>)}
-        {error && (<Alert  style={{marginTop: '10px'}} severity="error">{error}</Alert>)}
-        {!loading && (
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                 <Table movieList={ movies} />
+    if (!loggedIn) {
+      return <Redirect to="/login" />;
+    }
+    return (
+          <>
+          {loading && (<LinearProgress/>)}
+          {error && (<Alert  style={{marginTop: '10px'}} severity="error">{error}</Alert>)}
+          {!loading && (
+            <>
+            <Container maxWidth="xl" className={classes.container}>
+              <Paper className={fixedHeightPaper}>
+                Movies
+                {/* <Button size="small" variant="contained" color="primary">
+                    Create
+                </Button> */}
               </Paper>
-            </Grid>
-          </Grid>
-          <Box pt={4}>
-            <Copyright />
-          </Box>
-        </Container>)}
-      </main>
-    </div>
-  );
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <Table movieList={ movies} />
+                </Grid>
+              </Grid>
+              <Box pt={4}>
+                <Copyright />
+              </Box>
+            </Container>
+          </>)}
+          </>
+       
+    );
 }

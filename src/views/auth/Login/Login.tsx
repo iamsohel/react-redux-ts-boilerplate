@@ -77,7 +77,7 @@ export default function Login(props:any) {
     currentUser,
     loading } = useTypedSelector(
     (state) => state.auth
-);
+  ); 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
