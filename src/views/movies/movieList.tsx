@@ -116,6 +116,7 @@ export default function Dashboard() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const { loggedIn} = useTypedSelector((state) => state.auth);
+    
     const handleDelete = async (id: string) => {
         // await deletePost(id);
         // const posts = post.filter(p => p.id !== id);
@@ -145,9 +146,8 @@ export default function Dashboard() {
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-                          <Paper className={classes.paper}>
-                              {!loading && (<Table movieList={ movies} />)}
-                
+                <Paper className={classes.paper}>
+                  {!loading && (<Table movieList={ movies} />)}
               </Paper>
             </Grid>
           </Grid>
@@ -160,51 +160,5 @@ export default function Dashboard() {
   );
 }
 
-// import React, {useEffect} from 'react';
-// import { Table, Card, Button } from 'react-bootstrap';
 
 
-
-// const Dashboard: React.FC = () => {
-    
-
-//     return(
-//         <>
-//             {movies.length > 0 && (
-//                 <>
-//                     <Card className="text-center" style={{marginTop: '50px'}}>
-//                         <Card.Header>Demo App</Card.Header>
-//                     </Card>
-//                     <Table striped bordered hover variant="dark">
-//                         <thead>
-//                             <tr>
-//                             <th>Movie Title</th>
-//                             <th>Genre</th>
-//                             <th>Action</th>
-//                             </tr>
-//                         </thead>
-//                         <tbody>
-//                             {movies.length > 0 && movies.map(p => (
-//                                 <tr key={p._id}>
-//                                     <td>{p.title}</td>
-//                                     <td>{p.genre.name}</td>
-//                                     <td>
-//                                       <Link to={`/form/new`} ><Button variant="primary">ADD</Button></Link>{' '}
-//                                         <Link to={`/form/${p._id}`} ><Button variant="success">Update</Button></Link>{' '}
-//                                         <Button variant="danger" onClick={() => handleDelete(p._id)}>Delete</Button>
-//                                     </td>
-//                                 </tr>
-//                             ))}
-//                         </tbody>
-//                     </Table>
-//                  </>
-//             )}
-//             {movies.length === 0 && (
-//                 <p>Loading...</p>
-//             )}
-            
-//         </>
-//     )
-// }
-
-// export default Dashboard;

@@ -28,7 +28,7 @@ interface UpdateMovie {
 
 interface DeleteMovie {
     type: ActionType.DELETE_MOVIE;
-    payload: any;
+    payload: string;
 }
 
 
