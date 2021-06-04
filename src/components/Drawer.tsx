@@ -1,7 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,10 +8,8 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
-import Badge from '@material-ui/core/Badge';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -21,6 +18,12 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import PeopleIcon from '@material-ui/icons/People';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
+import { Link } from 'react-router-dom';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import { useDispatch } from 'react-redux';
+import { useActions } from '../hooks/useActions';
 
 const drawerWidth = 240;
 
@@ -103,15 +106,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppDrawer = () => {
+
+interface Props {
+  match?: {
+      params: {
+          id:  any
+      },
+      url: string,
+      path: string,
+      isExact: boolean,
+
+  },
+  history?: any,
+}
+
+const AppDrawer = ({match, history }: Props) => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const opens = Boolean(anchorEl);
+    const { logoutUser } = useActions();
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorEl(event.currentTarget);
+    };
+  
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
+    const handleLogout = () => {
+      setAnchorEl(null);
+      logoutUser(history)
+    }
+
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
     return (
         <>
@@ -130,9 +162,35 @@ const AppDrawer = () => {
                 Dashboard
                 </Typography>
                 <IconButton color="inherit">
-                <Badge badgeContent={4} color="secondary">
-                    <NotificationsIcon />
-                </Badge>
+                <div>
+                    <IconButton
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <AccountCircle />
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={opens}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                    </Menu>
+                  </div>
                 </IconButton>
             </Toolbar>
         </AppBar>
@@ -151,18 +209,22 @@ const AppDrawer = () => {
             <Divider />
             <List>
             <div>
+            <Link to="/movies">
                 <ListItem button>
                 <ListItemIcon>
                     <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
                 </ListItem>
-                <ListItem button>
-                <ListItemIcon>
-                    <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Movies" />
-                </ListItem>
+              </Link>
+                <Link to="/movie/create">
+                  <ListItem button>
+                  <ListItemIcon>
+                      <ShoppingCartIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Movies" />
+                  </ListItem>
+                </Link>
                 <ListItem button>
                 <ListItemIcon>
                     <PeopleIcon />

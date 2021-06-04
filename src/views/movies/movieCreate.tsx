@@ -1,11 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import { Grid, Button, TextField, Divider, MenuItem } from '@material-ui/core';
+import { Grid, Button, TextField, Divider, MenuItem, Container } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '../../components/LinearProgress';
 import { useActions } from '../../hooks/useActions';
-
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import Alert from '../../components/Aleart';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -60,28 +62,29 @@ interface Props {
 
 const CreateMovie = ({match, history }: Props) => {
   const classes = useStyles();
-  const [title, setTitle] = React.useState('');
-  const [numberInStock, setNumberInStock] = React.useState('');
-  const [dailyRentalRate, setDailyRentalRate] = React.useState('');
-  const [genreId, setGenreId] = React.useState('');
+  const [title, setTitle] = React.useState<string>('');
+  const [numberInStock, setNumberInStock] = React.useState<number>(0);
+  const [dailyRentalRate, setDailyRentalRate] = React.useState<number>(0);
+  const [genreId, setGenreId] = React.useState<string>('');
   const { addMovie } = useActions();
+  const {loading, error } = useTypedSelector((state) => state.movies);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
         const data ={
-            title:"move1",
-            genreId:"60407095a73f77587054935c",
-            numberInStock: 50,
-            dailyRentalRate:40
+            title: title,
+            genreId:"60407097a73f77587054935e",
+            numberInStock: numberInStock,
+            dailyRentalRate: dailyRentalRate
         }
-        addMovie(data);
-        history.push("/movies");
+        addMovie(data, history);
     }
 
   return (
     <React.Fragment>
-          <main className={classes.layout}>
-         <LinearProgress/>
+          <Container maxWidth="xl">
+         {loading && <LinearProgress/>}
+         {error && (<Alert  style={{marginTop: '10px'}} severity="error">{error}</Alert>)}
          
         <Paper className={classes.paper}>
         <form onSubmit={handleSubmit}>
@@ -111,7 +114,7 @@ const CreateMovie = ({match, history }: Props) => {
                 id="numberInStock"
                 name="numberInStock"
                 value={numberInStock}
-                onChange= { e => setNumberInStock(e.target.value)}
+                onChange= { e => setNumberInStock(parseInt(e.target.value))}
                 label="Number In Stock"
                 fullWidth
                 autoComplete="family-name"
@@ -125,7 +128,7 @@ const CreateMovie = ({match, history }: Props) => {
                 id="dailyRentalRate"
                 name="dailyRentalRate"
                 value={dailyRentalRate}
-                onChange= { e => setDailyRentalRate(e.target.value)}
+                onChange= { e => setDailyRentalRate(parseInt(e.target.value))}
                 label="Daily Rental Rate"
                 fullWidth
                 autoComplete="shipping address-level2"
@@ -151,6 +154,7 @@ const CreateMovie = ({match, history }: Props) => {
         </Grid>
         </React.Fragment>
         <div className={classes.buttons}>
+            <Link to={`/movies`} style={{textDecoration: 'none'}}>
             <Button
                 variant="contained"
                 color="secondary"
@@ -158,6 +162,7 @@ const CreateMovie = ({match, history }: Props) => {
             >
                           Cancel
             </Button>
+            </Link>
             <Button
             type="submit"
                 variant="contained"
@@ -169,7 +174,7 @@ const CreateMovie = ({match, history }: Props) => {
         </div>
         </form>
         </Paper>
-      </main>
+      </Container>
     </React.Fragment>
   );
 }

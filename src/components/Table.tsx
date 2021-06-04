@@ -16,6 +16,7 @@ import { Movie } from '../services/movieService';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useActions } from '../hooks/useActions';
@@ -131,6 +132,7 @@ export default function CustomPaginationActionsTable({movieList}: PropsType) {
             <TableCell >Genre</TableCell>
             <TableCell >In Stock</TableCell>
             <TableCell >Daily Rate</TableCell>
+
             <TableCell align="center">Action</TableCell>
           </TableRow>
         </TableHead>
@@ -153,6 +155,7 @@ export default function CustomPaginationActionsTable({movieList}: PropsType) {
                 {row.dailyRentalRate}
                   </TableCell>
             <TableCell  align="center">
+              <Link to={`/movie/update/${row._id}`} >
               <Button
                 variant="contained"
                 color="primary"
@@ -160,7 +163,7 @@ export default function CustomPaginationActionsTable({movieList}: PropsType) {
                 startIcon={<CreateIcon />}
               >
                 Update
-              </Button>  {'  '} 
+              </Button> </Link> {'  '} 
               <Button
                 variant="contained"
                 color="secondary"

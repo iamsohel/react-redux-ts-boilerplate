@@ -1,5 +1,4 @@
 import http from "./httpService";
-
 export interface Movie {
     _id: string,
     title: string,
@@ -16,26 +15,22 @@ export function getAllMovie() {
     return http.get("/movies");
 }
 
+
 export function getMovie(id: string) {
     return http.get(`/movies/${id}`);
 }
 
 export function saveMovie(movie: any) {
-    if (movie.id) {
+    if (movie._id) {
         const body = {...movie};
-        delete body.id;
-        return http.put(`/movies/${movie.id}`, body);
+        delete body._id;
+        return http.put(`/movies/${movie._id}`, body);
     }
     return http.post(`/movies`, movie);
 }
 
 export function removeMovie(id: string) {
-    return http.delete(`/movies/${id}`);
+    return http.delete(`/moviess/${id}`);
 }
 
-// export default {
-//     getAllMovie,
-//     removeMovie,
-//     saveMovie
-//   };
   

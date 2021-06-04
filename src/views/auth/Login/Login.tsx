@@ -19,7 +19,7 @@ function Copyright() {
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="#">
-        Volcano Lab
+        V Lab
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -77,7 +77,7 @@ export default function Login(props:any) {
     currentUser,
     loading } = useTypedSelector(
     (state) => state.auth
-);
+  ); 
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -92,7 +92,7 @@ export default function Login(props:any) {
   }
 
   if (loggedIn) {
-    return <Redirect to="/" />;
+    return <Redirect to="/movies" />;
   }
 
   return (

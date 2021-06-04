@@ -1,29 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Paper from '@material-ui/core/Paper';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import { Grid, Button, TextField, Divider } from '@material-ui/core';
-import Link from '@material-ui/core/Link';
+import { Grid, Button, TextField, Divider, MenuItem, Container } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
+import LinearProgress from '../../components/LinearProgress';
+import { useActions } from '../../hooks/useActions';
+import { useDispatch } from 'react-redux';
+import { getAMovie,  } from '../../state/action-creators/movie';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import Alert from '../../components/Aleart';
 
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -63,123 +49,157 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Checkout() {
+interface Props {
+  match: {
+      params: {
+          id:  any
+      },
+      url: string,
+      path: string,
+      isExact: boolean,
+
+  },
+  history: any,
+}
+
+const UpdateMovie = ({match, history }: Props) => {
+  const dispatch = useDispatch();
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [open, setOpen] = React.useState(true);
+  const [title, setTitle] = React.useState<string>('');
+  const [numberInStock, setNumberInStock] = React.useState<number>(0);
+  const [dailyRentalRate, setDailyRentalRate] = React.useState<number>(0);
+  const [genreId, setGenreId] = React.useState<string>('');
+  const { editMovie } = useActions();
+  const { selectedMovie, loading, error } = useTypedSelector((state) => state.movies);
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
+  const handleSubmit = async (e: any) => {
+      e.preventDefault();
+      const data ={
+          title: title,
+          genreId: "604f32c72f70f9318447622c",
+          numberInStock: numberInStock,
+          dailyRentalRate: dailyRentalRate,
+          _id: match.params.id
+      }
+      editMovie(data, history);
+  }
 
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+    const handleCancel = () => {
+      history.push("/movies");
+    }
 
+    React.useEffect(() => {
+      dispatch(getAMovie(match.params.id))
+      console.log("m, l: ",selectedMovie, loading)
+      if(selectedMovie){
+        setTitle(selectedMovie.title);
+        setNumberInStock(selectedMovie.numberInStock);
+        setDailyRentalRate(selectedMovie.dailyRentalRate);
+        setGenreId(selectedMovie.genre._id);
+      }
+    }, [])
+    
+    console.log("m2, l2: ",selectedMovie, loading)
   return (
     <React.Fragment>
-  
-      <main className={classes.layout}>
-        <Paper className={classes.paper}>
-          <Typography  variant="h5" >
-            Update Movie
-          </Typography>
-          <React.Fragment>
-                      <Divider style={{marginTop:"10px"}}/>
-        <Grid container spacing={3}>
-            <Grid item xs={12} sm={6}>
-            <TextField
-                required
-                id="firstName"
-                name="firstName"
-                label="First name"
-                fullWidth
-                autoComplete="given-name"
-            />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-            <TextField
-                required
-                id="lastName"
-                name="lastName"
-                label="Last name"
-                fullWidth
-                autoComplete="family-name"
-            />
-            </Grid>
-            <Grid item xs={12}>
-            <TextField
-                required
-                id="address1"
-                name="address1"
-                label="Address line 1"
-                fullWidth
-                autoComplete="shipping address-line1"
-            />
-            </Grid>
-            <Grid item xs={12}>
-            <TextField
-                id="address2"
-                name="address2"
-                label="Address line 2"
-                fullWidth
-                autoComplete="shipping address-line2"
-            />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-            <TextField
-                required
-                id="city"
-                name="city"
-                label="City"
-                fullWidth
-                autoComplete="shipping address-level2"
-            />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-            <TextField id="state" name="state" label="State/Province/Region" fullWidth />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-            <TextField
-                required
-                id="zip"
-                name="zip"
-                label="Zip / Postal code"
-                fullWidth
-                autoComplete="shipping postal-code"
-            />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-            <TextField
-                required
-                id="country"
-                name="country"
-                label="Country"
-                fullWidth
-                autoComplete="shipping country"
-            />
-            </Grid>
+          
+        
+          <Container maxWidth="xl">
+            {loading && (<LinearProgress/>)}
+            {error && (<Alert  style={{marginTop: '10px'}} severity="error">{error}</Alert>)} 
+            {selectedMovie && (
+           <Paper className={classes.paper}>
+           <form onSubmit={handleSubmit}>
+             <Typography  variant="h5" >
+               Update Movie
+             </Typography>
+             <React.Fragment>
+             <Divider style={{marginTop:"10px"}}/>
             
-        </Grid>
-        </React.Fragment>
-        <div className={classes.buttons}>
-            <Button
-                variant="contained"
-                color="secondary"
-                className={classes.button}
-            >
-                          Cancel
-            </Button>
-            <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-            >
-                    Submit
-            </Button>
-        </div>
-        </Paper>
-        <Copyright />
-      </main>
+           <Grid container spacing={3}>
+               <Grid item xs={12} sm={6}>
+               <TextField
+                   required
+                   id="title"
+                   name="title"
+                   value={title? title: selectedMovie.title}
+                   onChange= { e => setTitle(e.target.value)}
+                   label="Title"
+                   fullWidth
+                   autoComplete="given-name"
+               />
+               </Grid>
+               <Grid item xs={12} sm={6}>
+               <TextField
+                   required
+                   type="number"
+                   id="numberInStock"
+                   name="numberInStock"
+                   value={numberInStock ? numberInStock : selectedMovie.numberInStock}
+                   onChange= { e => setNumberInStock(parseInt(e.target.value))}
+                   label="Number In Stock"
+                   fullWidth
+                   autoComplete="family-name"
+               />
+               </Grid>
+               
+               <Grid item xs={12} sm={6}>
+               <TextField
+                   required
+                   type="number"
+                   id="dailyRentalRate"
+                   name="dailyRentalRate"
+                   value={dailyRentalRate ? dailyRentalRate : selectedMovie.dailyRentalRate}
+                   onChange= { e => setDailyRentalRate(parseInt(e.target.value))}
+                   label="Daily Rental Rate"
+                   fullWidth
+                   autoComplete="shipping address-level2"
+               />
+               </Grid>
+               <Grid item xs={12} sm={6}>
+               <TextField
+                   id="genreId"
+                   select
+                   label="Select Genre"
+                   value={genreId ? genreId : selectedMovie.genre._id}
+                   onChange= { e => setGenreId(e.target.value)}
+                   helperText="Please select genre"
+                 >
+                     <MenuItem key="1" value="604f32c72f70f9318447622c">
+                       Action
+                     </MenuItem>
+                     <MenuItem key="2" value="604f32c72f70f9318447622c">
+                       Horror
+                     </MenuItem>
+                 </TextField>
+               </Grid>
+           </Grid>
+           </React.Fragment>
+           <div className={classes.buttons}>
+               <Button
+                   variant="contained"
+                   color="secondary"
+                   className={classes.button}
+                   onClick={handleCancel}
+               >
+                             Cancel
+               </Button>
+               <Button
+               type="submit"
+                   variant="contained"
+                   color="primary"
+                   className={classes.button}
+               >
+                       Submit
+               </Button>
+           </div>
+           </form>
+           </Paper>
+        )}
+      </Container> 
     </React.Fragment>
   );
 }
+
+export default UpdateMovie;

@@ -19,7 +19,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
-import AppNavBar from '../../components/AppBar';
 import AppDrawer from '../../components/Drawer';
 import Copyright from '../../components/Footer';
 
@@ -116,11 +115,7 @@ export default function Dashboard() {
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppDrawer/>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
+   
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             {/* Chart */}
@@ -143,7 +138,6 @@ export default function Dashboard() {
             <Copyright />
           </Box>
         </Container>
-      </main>
-    </div>
+    
   );
 }

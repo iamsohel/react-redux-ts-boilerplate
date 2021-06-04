@@ -26,7 +26,6 @@ export function getCurrentUser() {
     if (token){
         const decoded =  jwt_decode(token);
         return decoded;
-        //return JSON.parse(user);
     } else {
         return null;
     }
@@ -39,7 +38,7 @@ export function getToken() {
   return localStorage.getItem('token');
 }
 
-const setAuthToken = (token: any) => {
+export const setAuthToken = (token: any) => {
   if(token){
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
   } else {

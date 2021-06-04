@@ -31,6 +31,16 @@ interface DeleteMovie {
     payload: string;
 }
 
+interface MovieError {
+  type: ActionType.MOVIE_ERROR;
+  payload: any;
+}
+
+interface ClearMovieError {
+  type: ActionType.CLEAR_MOVIE_ERROR;
+  payload: any;
+}
+
 
 export type Action =
   | MovieLoading
@@ -38,4 +48,6 @@ export type Action =
   | FetchMovies
   | AddMovie
   | UpdateMovie
-  | DeleteMovie;
+  | DeleteMovie
+  | MovieError
+  | ClearMovieError;
